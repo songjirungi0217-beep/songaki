@@ -46,11 +46,11 @@ export async function POST(req) {
       type: 'function',
       function: {
         name: 'get_schedule',
-        description: '특정 날짜의 학사일정을 조회합니다.',
+        description: '특정 월의 전체 학사일정을 조회합니다.',
         parameters: {
           type: 'object',
           properties: {
-            date: { type: 'string', description: '날짜 (YYYYMMDD 형식)' },
+            date: { type: 'string', description: '조회하고 싶은 월이 포함된 날짜 (YYYYMMDD 형식)' },
           },
           required: ['date'],
         },
