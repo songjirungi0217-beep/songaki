@@ -59,12 +59,20 @@ export async function POST(req) {
   ];
 
   try {
+    const now = new Date();
+    const kstOffset = 9 * 60 * 60 * 1000; // KST is UTC+9
+    const kstDate = new Date(now.getTime() + kstOffset);
+    const dateString = kstDate.toISOString().split('T')[0];
+    const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'][kstDate.getDay()];
+
     const response = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [
         {
           role: 'system',
-          content: '너는 송악고등학교 학생들을 돕는 AI 챗봇 \'송악이\'야. 항상 반말을 쓰고 친구처럼 친근하게 대화해. 학교 관련 정보 요청이 오면 도구를 사용해서 데이터를 가져와서 친절하게 알려줘.',
+          content: `너는 송악고등학교 학생들을 돕는 AI 챗봇 '송악이'야. 항상 반말을 쓰고 친구처럼 친근하게 대화해. 
+오늘의 날짜는 ${dateString}(${dayOfWeek}요일)이야. 
+학교 관련 정보 요청이 오면 도구를 사용해서 데이터를 가져와서 친절하게 알려줘.`,
         },
         ...messages,
       ],
@@ -116,7 +124,7 @@ export async function POST(req) {
         messages: [
            {
             role: 'system',
-            content: '너는 송악고등학교 학생들을 돕는 AI 챗봇 \'송악이\'야. 항상 반말을 쓰고 친구처럼 친근하게 대화해. 가져온 데이터를 바탕으로 학생에게 다정하게 대답해줘.',
+            content: `너는 송악고등학교 학생들을 돕는 AI 챗봇 '송악이'야. 항상 반말을 쓰고 친구처럼 친근하게 대화해. 오늘의 날짜는 ${dateString}(${dayOfWeek}요일)이야. 가져온 데이터를 바탕으로 학생에게 다정하게 대답해줘.`,
           },
           ...messagesWithToolCalls
         ],
